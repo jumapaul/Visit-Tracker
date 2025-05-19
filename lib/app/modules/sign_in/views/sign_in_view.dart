@@ -60,7 +60,9 @@ class SignInView extends GetView<SignInController> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () => controller.resetPassword(),
+                onPressed: () {
+                  // todo
+                },
                 child: Text(
                   "Forgot password?",
                   style: TextStyle(color: primaryColor, fontSize: 12),

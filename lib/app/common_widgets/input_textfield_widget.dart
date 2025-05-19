@@ -9,7 +9,9 @@ class InputTextFieldWidget extends StatelessWidget {
   final TextInputType? inputType;
   final TextEditingController editingController;
   final int minLines;
+  final int? maxLines;
   final VoidCallback? onTap;
+  final ValueChanged<String>? onChanged;
   final Validator? validator;
   final IconData? prefixIcon;
   final IconData? suffixIcon;
@@ -26,6 +28,8 @@ class InputTextFieldWidget extends StatelessWidget {
     this.validator,
     this.prefixIcon,
     this.suffixIcon,
+    this.onChanged,
+    this.maxLines,
   });
 
   @override
@@ -34,49 +38,16 @@ class InputTextFieldWidget extends StatelessWidget {
       controller: editingController,
       keyboardType: inputType,
       onTap: onTap,
+      onChanged: onChanged,
       decoration: InputDecoration(
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-        suffixIcon: Icon(suffixIcon),
+        suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
         hintText: hintText,
+        hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
         labelText: labelText,
         errorText: errorText,
-        hintStyle: const TextStyle(fontSize: 14),
-        labelStyle: TextStyle(
-          fontSize: 14,
-          color: Theme.of(context).colorScheme.inverseSurface,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Theme.of(
-              context,
-            ).colorScheme.outline.withOpacity(.5), // Set outline color
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.primary, // Focus color
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.error, // Error color
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.error, // Focused error color
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
       ),
-      maxLines: 4,
+      maxLines: maxLines,
       minLines: minLines,
       style: const TextStyle(fontSize: 14),
       validator: (val) {
@@ -128,11 +99,7 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
         hintText: widget.hintText,
         labelText: widget.labelText,
         errorText: widget.errorText,
-        hintStyle: const TextStyle(fontSize: 14),
-        labelStyle: TextStyle(
-          fontSize: 14,
-          color: Theme.of(context).colorScheme.inverseSurface,
-        ),
+        hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
         prefixIcon: Icon(Icons.lock_outline),
         suffixIcon: IconButton(
           onPressed: () {
@@ -142,36 +109,6 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
               showPassword
                   ? const Icon(size: 15, Icons.visibility)
                   : const Icon(size: 15, Icons.visibility_off),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Theme.of(
-              context,
-            ).colorScheme.outline.withOpacity(.5), // Set outline color
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.primary, // Focus color
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.error, // Error color
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.error, // Focused error color
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(8.0),
         ),
       ),
       style: const TextStyle(fontSize: 14),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:visit_tracker/app/data/model/register_user_dto.dart';
-
+import 'package:visit_tracker/app/data/providers/api_providers.dart';
 import '../../../routes/app_pages.dart';
 
 class SignUpController extends GetxController {
@@ -14,39 +13,29 @@ class SignUpController extends GetxController {
   Rxn<String?> emailErrorMessage = Rxn();
   Rxn<String?> passwordErrorMessage = Rxn();
   var isLoading = false.obs;
-
-  final supabase = Supabase.instance.client;
+  ApiProviders apiProviders = ApiProviders();
 
   signUp() async {
-    try {
+    bool isEmailValid = validEmail(emailAddressController.text);
+    bool passwordValid = isPasswordValid(passwordController.text);
+    if (isEmailValid && passwordValid) {
       isLoading.value = true;
-      bool passwordValid = isPasswordValid(passwordController.text);
-      bool emailValid = validEmail(emailAddressController.text);
-
-      RegisterUserDto user = RegisterUserDto(
+      var userData = RegisterUserDto(
         firstName: firstNameController.text,
         lastName: lastNameController.text,
       );
-      if (passwordValid && emailValid) {
-        var response = await supabase.auth.signUp(
-          email: emailAddressController.text,
-          password: passwordController.text,
-          data: user.toJson(),
-        );
+      var response = await apiProviders.signUp(
+        userData,
+        passwordController.text,
+        emailAddressController.text,
+      );
 
-        if (response.user != null) {
-          isLoading.value = false;
-          Get.offAllNamed(Routes.SIGN_IN);
-        }
-
+      if (response?.user != null) {
+        isLoading.value = false;
+        Get.offAllNamed(Routes.SIGN_IN);
+      } else {
         isLoading.value = false;
       }
-    } catch (error) {
-      ScaffoldMessenger.of(
-        Get.context!,
-      ).showSnackBar(SnackBar(content: Text(error.toString())));
-
-      isLoading.value = false;
     }
   }
 

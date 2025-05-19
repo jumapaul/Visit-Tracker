@@ -20,13 +20,6 @@ class OutlinedButtonWidget extends StatelessWidget {
       width: double.infinity,
       height: 50,
       child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          backgroundColor: primaryColor,
-          side: BorderSide(color: primaryColor),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
         onPressed: onClick,
         child: Padding(
           padding: const EdgeInsets.only(top: 15, bottom: 15),
