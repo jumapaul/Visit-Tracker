@@ -15,12 +15,12 @@ class HomeController extends GetxController {
   ApiProviders apiProviders = ApiProviders();
   var addCustomerState = false.obs;
   var addActivityState = false.obs;
-  Rx<DataState<CustomerDto>> customers = Rx(Initial());
+  Rx<DataState<CustomerResponse>> customers = Rx(Initial());
 
   Future<void> addCustomer() async {
     addCustomerState.value = true;
     var body = CustomerDto(customerName: customerNameController.text);
-    await apiProviders.addVisits(body);
+    await apiProviders.addCustomer(body);
     getAllCustomers();
     addCustomerState.value = false;
     customerNameController.clear();

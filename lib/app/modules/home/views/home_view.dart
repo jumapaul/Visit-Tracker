@@ -26,7 +26,6 @@ class HomeView extends GetView<HomeController> {
                 suffixIcon: Icons.search,
                 maxLines: 1,
                 onChanged: (value) {
-                  print("=========>customer $value");
                   controller.searchCustomer(value);
                 },
               ),

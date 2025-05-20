@@ -22,7 +22,6 @@ class ActivitiesView extends GetView<ActivitiesController> {
             InputTextFieldWidget(
               hintText: "Enter activity",
               onChanged: (value) {
-                print("=========activity is $value");
                 controller.getSearchedActivities(value);
               },
               maxLines: 1,
@@ -48,10 +47,10 @@ class ActivitiesView extends GetView<ActivitiesController> {
                   );
                 } else if (state is Error) {
                   return Center(child: Text(state.error ?? ""));
-                } else if (state is Empty) {
-                  return Center(child: Text("No activity"));
-                } else {
+                } else if (state is Initial) {
                   return Center(child: CircularProgressIndicator());
+                }else{
+                  return Center(child: Text("No activity"));
                 }
               }),
             ),
@@ -69,10 +68,7 @@ class ActivitiesView extends GetView<ActivitiesController> {
       width: MediaQuery.of(Get.context!).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Colors.grey,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey, width: 1),
       ),
       child: Row(
         children: [
@@ -143,22 +139,14 @@ class ActivitiesView extends GetView<ActivitiesController> {
                           activity.id ?? "",
                         );
                       },
-                      child: Obx(() {
-                        return controller.cancelStatus.value
-                            ? SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 3),
-                            )
-                            : Text(
-                              "Cancel",
-                              style: TextStyle(
-                                fontSize: normalSize,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.red,
-                              ),
-                            );
-                      }),
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                          fontSize: normalSize,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.red,
+                        ),
+                      ),
                     ),
                   ),
                 ),

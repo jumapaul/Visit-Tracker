@@ -1,6 +1,7 @@
 ## SOLUTECH Interview Solution
 
-👀 Solution code for the Route-to-Market (RTM) Sales Force Automation app. app for crossplatform using [flutter](https://flutter.dev/).
+👀 Solution code for the Route-to-Market (RTM) Sales Force Automation app. app for crossplatform
+using [flutter](https://flutter.dev/).
 The final app looks like this:
 
 #### Auth
@@ -17,10 +18,9 @@ The final app looks like this:
 
 ### Report Screen
 
-| Daily report                                       |
-|----------------------------------------------------|   
-| ![Daily Report screen image](images/analysis.jpeg) |
-
+| Report Section                                      |
+|-----------------------------------------------------|   
+| ![Daily Report screen image](images/analysis2.jpeg) |
 
 ### Prerequisites
 
@@ -50,7 +50,9 @@ The final app looks like this:
 
 ### Background
 
-Your task is to build a Visits Tracker feature for a Route-to-Market (RTM) Sales Force Automation app. Design and structure your solution as though this feature is part of a larger, scalable application.
+Your task is to build a Visits Tracker feature for a Route-to-Market (RTM) Sales Force Automation
+app. Design and structure your solution as though this feature is part of a larger, scalable
+application.
 The app should allow a sales rep to:
 ● Add a new visit by filling out a form
 ● View a list of their customer visits

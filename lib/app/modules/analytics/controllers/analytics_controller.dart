@@ -30,28 +30,29 @@ class AnalyticsController extends GetxController {
     }
   }
 
-  List<SfData> buildChartData(List<ActivityResponse> activities) {
+  List<SfData> buildChartData(List<ActivityResponse>? activities) {
     final now = DateTime.now();
     final sevenDaysAgo = now.subtract(Duration(days: 6));
 
-    // Use a Map to store counts by actual DateTime
     final Map<DateTime, Map<String, int>> grouped = {};
 
-    for (var activity in activities) {
-      final dateStr = activity.createdAt.split('T').first;
-      final date = DateTime.tryParse(dateStr);
+    if(activities !=null){
+      for (var activity in activities) {
+        final dateStr = activity.createdAt.split('T').first;
+        final date = DateTime.tryParse(dateStr);
 
-      if (date == null || date.isBefore(sevenDaysAgo)) continue;
+        if (date == null || date.isBefore(sevenDaysAgo)) continue;
 
-      final dayKey = DateTime(date.year, date.month, date.day);
-      final status = activity.status ?? 'Unknown';
+        final dayKey = DateTime(date.year, date.month, date.day);
+        final status = activity.status ?? 'Unknown';
 
-      if (!grouped.containsKey(dayKey)) {
-        grouped[dayKey] = {'Completed': 0, 'Pending': 0, 'Cancelled': 0};
-      }
+        if (!grouped.containsKey(dayKey)) {
+          grouped[dayKey] = {'Completed': 0, 'Pending': 0, 'Cancelled': 0};
+        }
 
-      if (grouped[dayKey]!.containsKey(status)) {
-        grouped[dayKey]![status] = grouped[dayKey]![status]! + 1;
+        if (grouped[dayKey]!.containsKey(status)) {
+          grouped[dayKey]![status] = grouped[dayKey]![status]! + 1;
+        }
       }
     }
 

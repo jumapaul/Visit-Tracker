@@ -22,7 +22,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
         padding: EdgeInsets.all(10),
         child: Obx(() {
           var activities = controller.activities.value;
-          final chartData = controller.buildChartData(activities.data!);
+          final chartData = controller.buildChartData(activities.data);
           return Column(
             children: [
               Row(
@@ -43,11 +43,19 @@ class AnalyticsView extends GetView<AnalyticsController> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text(
+                                'Overall overview',
+                                style: AppTextStyles.largeSubHeaderStyle,
+                              ),
                               _buildReportSection(activities.data!),
                               mediumVerticalSpacing,
+                              Text(
+                                'Daily counts',
+                                style: AppTextStyles.largeSubHeaderStyle,
+                              ),
                               _buildDailyReportSection(chartData),
                               Text(
-                                'Counts',
+                                'Total counts',
                                 style: AppTextStyles.largeSubHeaderStyle,
                               ),
                               StaggeredGrid.count(
@@ -146,35 +154,29 @@ class AnalyticsView extends GetView<AnalyticsController> {
   }
 
   _buildDailyReportSection(List<SfData> chartData) {
-    return Container(
-      child: SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        legend: Legend(isVisible: true, position: LegendPosition.bottom),
-        series: <CartesianSeries>[
-          StackedColumn100Series<SfData, String>(
-            dataSource: chartData,
-            xValueMapper: (SfData data, _) => data.x,
-            yValueMapper: (SfData data, _) => data.complete,
-            name: 'Complete',
-            width: 0.8,
-            spacing: 0.2,
-          ),
-          StackedColumn100Series<SfData, String>(
-            dataSource: chartData,
-            xValueMapper: (SfData data, _) => data.x,
-            yValueMapper: (SfData data, _) => data.pending,
-            width: 0.8,
-            spacing: 0.2,
-          ),
-          StackedColumn100Series<SfData, String>(
-            dataSource: chartData,
-            xValueMapper: (SfData data, _) => data.x,
-            yValueMapper: (SfData data, _) => data.cancelled,
-            width: 0.8,
-            spacing: 0.2,
-          ),
-        ],
-      ),
+    return SfCartesianChart(
+      primaryXAxis: CategoryAxis(),
+      legend: Legend(isVisible: true, position: LegendPosition.bottom),
+      series: <CartesianSeries>[
+        ColumnSeries<SfData, String>(
+          dataSource: chartData,
+          xValueMapper: (SfData data, _) => data.x,
+          yValueMapper: (SfData data, _) => data.complete,
+          name: 'Complete',
+        ),
+        ColumnSeries<SfData, String>(
+          dataSource: chartData,
+          xValueMapper: (SfData data, _) => data.x,
+          yValueMapper: (SfData data, _) => data.pending,
+          name: "Pending",
+        ),
+        ColumnSeries<SfData, String>(
+          dataSource: chartData,
+          xValueMapper: (SfData data, _) => data.x,
+          yValueMapper: (SfData data, _) => data.cancelled,
+          name: "Cancelled",
+        ),
+      ],
     );
   }
 
