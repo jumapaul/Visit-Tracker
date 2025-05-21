@@ -12,15 +12,15 @@ The final app looks like this:
 
 #### Home Screen
 
-| Add Customers                             | Add visits                             | Customer activities                  |
-|-------------------------------------------|----------------------------------------|--------------------------------------|
-| ![add customers](images/addCustomer.jpeg) | ![add customers](images/addVisit.jpeg) | ![customers](images/activities.jpeg) |
+| Add Customers                             | Add visits                             | Customer activities                 |
+|-------------------------------------------|----------------------------------------|-------------------------------------|
+| ![add customers](images/addCustomer.jpeg) | ![add customers](images/addVisit.jpeg) | ![customers](images/activities.png) |
 
 ### Report Screen
 
-| Report Section                                      |
-|-----------------------------------------------------|   
-| ![Daily Report screen image](images/analysis2.jpeg) |
+| Report Section                                    |
+|---------------------------------------------------|   
+| ![Daily Report screen image](images/analysis.png) |
 
 ### Prerequisites
 

@@ -44,7 +44,6 @@ class ApiProviders extends GetConnect {
     try {
       return await supabase.client.from('customer').insert(customer.toJson());
     } catch (error) {
-      print("=============>customer $error");
       return _handleError(error);
     }
   }
@@ -57,7 +56,8 @@ class ApiProviders extends GetConnect {
           .order('created_at', ascending: true);
 
       final List<dynamic> data = response as List<dynamic>;
-      final customers = data.map((json) => CustomerResponse.fromJson(json)).toList();
+      final customers =
+          data.map((json) => CustomerResponse.fromJson(json)).toList();
 
       return customers.isEmpty ? const Empty() : Success(customers);
     } catch (error) {
@@ -134,7 +134,9 @@ class ApiProviders extends GetConnect {
     }
   }
 
-  Future<DataState<CustomerResponse>> searchCustomer(String? customerName) async {
+  Future<DataState<CustomerResponse>> searchCustomer(
+    String? customerName,
+  ) async {
     try {
       final response = await supabase.client
           .from('customer')
@@ -142,7 +144,8 @@ class ApiProviders extends GetConnect {
           .ilike('customer_name', '%$customerName%')
           .order('created_at', ascending: false);
       final List<dynamic> data = response as List<dynamic>;
-      final customers = data.map((json) => CustomerResponse.fromJson(json)).toList();
+      final customers =
+          data.map((json) => CustomerResponse.fromJson(json)).toList();
       return customers.isEmpty ? const Empty() : Success(customers);
     } catch (error) {
       if (error is PostgrestException) {
@@ -161,6 +164,30 @@ class ApiProviders extends GetConnect {
           .from('activity')
           .select()
           .ilike('activity', '%$activityName%')
+          .order('created_at', ascending: false);
+      final List<dynamic> data = response as List<dynamic>;
+      final activities =
+          data.map((json) => ActivityResponse.fromJson(json)).toList();
+      return activities.isEmpty ? const Empty() : Success(activities);
+    } catch (error) {
+      if (error is PostgrestException) {
+        return Error(error.details.toString());
+      } else {
+        return Error("An error occurred");
+      }
+    }
+  }
+
+  Future<DataState<ActivityResponse>> getForStatus(
+    String status,
+    customerId,
+  ) async {
+    try {
+      final response = await supabase.client
+          .from('activity')
+          .select()
+          .eq('status', status)
+          .eq('customer_id', customerId)
           .order('created_at', ascending: false);
       final List<dynamic> data = response as List<dynamic>;
       final activities =

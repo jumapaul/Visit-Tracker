@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:visit_tracker/app/data/providers/api_providers.dart';
 import 'package:visit_tracker/app/modules/analytics/models/sf_data.dart';
 import 'package:visit_tracker/app/utils/resources/data_state.dart';
-
 import '../../../data/model/activity_response.dart';
 import '../models/chart_data.dart';
 
@@ -14,6 +13,8 @@ class AnalyticsController extends GetxController {
   ApiProviders apiProviders = ApiProviders();
   Rxn<List<ChartData>> chartData = Rxn(null);
   final statusCount = {'Completed': 0, 'Pending': 0, 'Cancelled': 0}.obs;
+
+  final periodCount = {'Completed': 0, 'Pending': 0, 'Cancelled': 0}.obs;
 
   Future<void> getAllActivities() async {
     var allActivities = await apiProviders.getAllActivities();
@@ -36,7 +37,7 @@ class AnalyticsController extends GetxController {
 
     final Map<DateTime, Map<String, int>> grouped = {};
 
-    if(activities !=null){
+    if (activities != null) {
       for (var activity in activities) {
         final dateStr = activity.createdAt.split('T').first;
         final date = DateTime.tryParse(dateStr);
@@ -56,22 +57,23 @@ class AnalyticsController extends GetxController {
       }
     }
 
-    // Ensure all 7 days are represented
     for (int i = 0; i < 7; i++) {
-      final date = DateTime(now.year, now.month, now.day).subtract(Duration(days: 6 - i));
-      grouped.putIfAbsent(date, () => {
-        'Completed': 0,
-        'Pending': 0,
-        'Cancelled': 0,
-      });
+      final date = DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ).subtract(Duration(days: 6 - i));
+      grouped.putIfAbsent(
+        date,
+        () => {'Completed': 0, 'Pending': 0, 'Cancelled': 0},
+      );
     }
 
-    // Sort by date
-    final sortedEntries = grouped.entries.toList()
-      ..sort((a, b) => a.key.compareTo(b.key));
+    final sortedEntries =
+        grouped.entries.toList()..sort((a, b) => a.key.compareTo(b.key));
 
     return sortedEntries.map((entry) {
-      final formattedDate = '${entry.key.month}/${entry.key.day}'; // Or use intl for better formatting
+      final formattedDate = '${entry.key.month}/${entry.key.day}';
       final counts = entry.value;
       return SfData(
         formattedDate,

@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +27,7 @@ class ActivitiesView extends GetView<ActivitiesController> {
               },
               maxLines: 1,
               editingController: controller.searchActivityController,
+              prefixIcon: _buildStatusSection(context),
               suffixIcon: Icons.search,
             ),
             mediumVerticalSpacing,
@@ -49,7 +51,7 @@ class ActivitiesView extends GetView<ActivitiesController> {
                   return Center(child: Text(state.error ?? ""));
                 } else if (state is Initial) {
                   return Center(child: CircularProgressIndicator());
-                }else{
+                } else {
                   return Center(child: Text("No activity"));
                 }
               }),
@@ -155,6 +157,57 @@ class ActivitiesView extends GetView<ActivitiesController> {
           ),
         ],
       ),
+    );
+  }
+
+  _buildStatusSection(context) {
+    final statusOptions = [
+      {
+        "status": "Completed",
+        "action": () => controller.getActivitiesOfStatus("Completed"),
+      },
+      {
+        "status": "Cancelled",
+        "action": () => controller.getActivitiesOfStatus("Cancelled"),
+      },
+      {
+        "status": "Pending",
+        "action": () => controller.getActivitiesOfStatus("Pending"),
+      },
+      {"status": "All", "action": () => controller.getCustomerActivities()},
+    ];
+    return DropdownSearch<Map<String, dynamic>>(
+      clickProps: ClickProps(
+        borderRadius: BorderRadius.circular(20),
+        overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(MaterialState.pressed)) {
+            return Colors.grey[300];
+          }
+          return Colors.grey[200];
+        }),
+      ),
+      mode: Mode.custom,
+      items: (filter, cancelToken) => Future.value(statusOptions),
+      compareFn: (item1, item2) => item1['status'] == item2['status'],
+      popupProps: PopupProps.menu(
+        menuProps: MenuProps(
+          align: MenuAlign.bottomCenter,
+        ),
+        fit: FlexFit.loose,
+        itemBuilder: (context, item, isDisabled, isSelected) {
+          return ListTile(
+            selected: isSelected,
+            title: Text(item['status'], style: AppTextStyles.subHeaderStyle),
+            dense: true,
+          );
+        },
+      ),
+      dropdownBuilder: (ctx, selectedItem) => Icon(Icons.filter_list),
+      onChanged: (selectedItem) {
+        if (selectedItem != null) {
+          (selectedItem['action'] as Function)();
+        }
+      },
     );
   }
 

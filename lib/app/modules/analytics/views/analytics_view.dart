@@ -24,16 +24,11 @@ class AnalyticsView extends GetView<AnalyticsController> {
           var activities = controller.activities.value;
           final chartData = controller.buildChartData(activities.data);
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Today, ${controller.currentDay}',
-                    style: AppTextStyles.subHeaderStyle,
-                  ),
-                  _buildReportPeriod(context),
-                ],
+              Text(
+                'Today, ${controller.currentDay}',
+                style: AppTextStyles.subHeaderStyle,
               ),
               Expanded(
                 flex: 9,
@@ -54,10 +49,12 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 style: AppTextStyles.largeSubHeaderStyle,
                               ),
                               _buildDailyReportSection(chartData),
+
                               Text(
                                 'Total counts',
                                 style: AppTextStyles.largeSubHeaderStyle,
                               ),
+
                               StaggeredGrid.count(
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 10,
@@ -86,41 +83,6 @@ class AnalyticsView extends GetView<AnalyticsController> {
           );
         }),
       ),
-    );
-  }
-
-  _buildReportPeriod(context) {
-    return DropdownButton<String>(
-      value: controller.reportPeriod.value,
-      icon: const Icon(Icons.arrow_drop_down_rounded),
-      elevation: 0,
-      iconSize: 24,
-      underline: Container(),
-      dropdownColor:
-          Theme.of(context).brightness == Brightness.dark
-              ? Colors.grey
-              : Color(0xffF2F2F2),
-      items:
-          <String>[
-            'Monthly',
-            'Weekly',
-            'Daily',
-            'All',
-          ].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem(value: value, child: Text(value));
-          }).toList(),
-      onChanged: (String? newValue) {
-        controller.reportPeriod.value = newValue!;
-        if (newValue == 'Weekly') {
-          // controller.getWeeklyReport();
-        } else if (newValue == 'Monthly') {
-          // controller.getMonthlyReport();
-        } else if (newValue == 'All') {
-          // controller.getDailyReport();
-        } else {
-          //tod0
-        }
-      },
     );
   }
 
@@ -161,19 +123,25 @@ class AnalyticsView extends GetView<AnalyticsController> {
         ColumnSeries<SfData, String>(
           dataSource: chartData,
           xValueMapper: (SfData data, _) => data.x,
-          yValueMapper: (SfData data, _) => data.complete,
+          yValueMapper:
+              (SfData data, _) =>
+                  data.complete == 0 ? 0.1 : data.complete.toDouble(),
           name: 'Complete',
         ),
         ColumnSeries<SfData, String>(
           dataSource: chartData,
           xValueMapper: (SfData data, _) => data.x,
-          yValueMapper: (SfData data, _) => data.pending,
+          yValueMapper:
+              (SfData data, _) =>
+                  data.pending == 0 ? 0.1 : data.pending.toDouble(),
           name: "Pending",
         ),
         ColumnSeries<SfData, String>(
           dataSource: chartData,
           xValueMapper: (SfData data, _) => data.x,
-          yValueMapper: (SfData data, _) => data.cancelled,
+          yValueMapper:
+              (SfData data, _) =>
+                  data.cancelled == 0 ? 0.1 : data.cancelled.toDouble(),
           name: "Cancelled",
         ),
       ],

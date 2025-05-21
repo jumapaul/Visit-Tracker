@@ -13,7 +13,7 @@ class InputTextFieldWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final ValueChanged<String>? onChanged;
   final Validator? validator;
-  final IconData? prefixIcon;
+  final Widget? prefixIcon;
   final IconData? suffixIcon;
 
   const InputTextFieldWidget({
@@ -40,7 +40,7 @@ class InputTextFieldWidget extends StatelessWidget {
       onTap: onTap,
       onChanged: onChanged,
       decoration: InputDecoration(
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+        prefixIcon: prefixIcon,
         suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
         hintText: hintText,
         hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,

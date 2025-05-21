@@ -9,6 +9,7 @@ class ActivitiesController extends GetxController {
   final String customerId = Get.arguments['customerId'];
   ApiProviders apiProviders = ApiProviders();
   Rx<DataState<ActivityResponse>> activities = Rx(Initial());
+  var status = 'Daily'.obs;
 
   Future<void> getCustomerActivities() async {
     activities.value = Initial();
@@ -39,6 +40,11 @@ class ActivitiesController extends GetxController {
 
   Future<void> getSearchedActivities(String? activityName) async {
     activities.value = await apiProviders.searchActivity(activityName);
+  }
+
+  Future<void> getActivitiesOfStatus(String status) async {
+    activities.value = Initial();
+    activities.value = await apiProviders.getForStatus(status, customerId);
   }
 
   @override

@@ -45,7 +45,7 @@ class SignInView extends GetView<SignInController> {
             const Text("Sign in to continue"),
             const SizedBox(height: extraLargeSize),
             InputTextFieldWidget(
-              prefixIcon: Icons.email_outlined,
+              prefixIcon: Icon(Icons.email_outlined),
               hintText: 'Email Address',
               labelText: "Email address",
               editingController: controller.emailController,
