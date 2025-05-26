@@ -60,7 +60,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ANALYTICS,
-      page: () => const AnalyticsView(),
+      page: () => AnalyticsView(),
       binding: AnalyticsBinding(),
     ),
     GetPage(

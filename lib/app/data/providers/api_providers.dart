@@ -40,6 +40,16 @@ class ApiProviders extends GetConnect {
     }
   }
 
+  Future<bool> signOut() async {
+    try {
+      await supabase.client.auth.signOut();
+      return true;
+    } catch (error) {
+      _handleError(error);
+      return false;
+    }
+  }
+
   Future<PostgrestResponse?> addCustomer(CustomerDto customer) async {
     try {
       return await supabase.client.from('customer').insert(customer.toJson());
@@ -50,9 +60,11 @@ class ApiProviders extends GetConnect {
 
   Future<DataState<CustomerResponse>> getAllCustomers() async {
     try {
+      String? userId = supabase.client.auth.currentUser?.id;
       final response = await supabase.client
           .from('customer')
           .select()
+          .eq('user_id', userId ?? "")
           .order('created_at', ascending: true);
 
       final List<dynamic> data = response as List<dynamic>;
@@ -100,9 +112,12 @@ class ApiProviders extends GetConnect {
     }
   }
 
-  Future<DataState<ActivityResponse>> getAllActivities() async {
+  Future<DataState<ActivityResponse>> getAllActivities(String userId) async {
     try {
-      final response = await supabase.client.from('activity').select();
+      final response = await supabase.client
+          .from('activity')
+          .select()
+          .eq('user_id', userId);
 
       final List<dynamic> data = response as List<dynamic>;
       final allActivities =
@@ -136,11 +151,13 @@ class ApiProviders extends GetConnect {
 
   Future<DataState<CustomerResponse>> searchCustomer(
     String? customerName,
+    userId,
   ) async {
     try {
       final response = await supabase.client
           .from('customer')
           .select()
+          .eq('user_id', userId)
           .ilike('customer_name', '%$customerName%')
           .order('created_at', ascending: false);
       final List<dynamic> data = response as List<dynamic>;
@@ -158,11 +175,13 @@ class ApiProviders extends GetConnect {
 
   Future<DataState<ActivityResponse>> searchActivity(
     String? activityName,
+    customerId,
   ) async {
     try {
       final response = await supabase.client
           .from('activity')
           .select()
+          .eq('customer_id', customerId)
           .ilike('activity', '%$activityName%')
           .order('created_at', ascending: false);
       final List<dynamic> data = response as List<dynamic>;

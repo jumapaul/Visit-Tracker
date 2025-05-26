@@ -5,6 +5,7 @@ class AddActivityDto {
   final String customerId;
   final String? status;
   final String createdAt;
+  final String userId;
 
   AddActivityDto({
     required this.activity,
@@ -13,6 +14,7 @@ class AddActivityDto {
     required this.customerId,
     this.status,
     required this.createdAt,
+    required this.userId,
   });
 
   Map<String, dynamic> toJson() => {
@@ -22,6 +24,7 @@ class AddActivityDto {
     'customer_id': customerId,
     'status': status,
     'created_at': createdAt,
+    'user_id': userId,
   };
 
   factory AddActivityDto.fromJson(Map<String, dynamic> json) => AddActivityDto(
@@ -31,5 +34,6 @@ class AddActivityDto {
     customerId: json['customer_id'],
     status: json['status'],
     createdAt: json['created_at'],
+    userId: json['user_id'],
   );
 }

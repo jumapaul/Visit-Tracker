@@ -7,6 +7,7 @@ import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,22 +21,20 @@ class ProfileView extends GetView<ProfileController> {
                 extraLargeVerticalSpacing,
                 Container(
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.grey.shade300, width: 1)),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.grey.shade300, width: 1),
+                  ),
                   width: 100,
                   height: 100,
                   child: ClipOval(
                     child: Image.asset(
-                     'assets/images/user.png',
+                      'assets/images/user.png',
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 smallVerticalSpacing,
-                Text(
-                  'John doe',
-                  style: AppTextStyles.largeSubHeaderStyle,
-                ),
+                Text('John doe', style: AppTextStyles.largeSubHeaderStyle),
                 smallVerticalSpacing,
                 Padding(
                   padding: EdgeInsets.all(10),
@@ -51,19 +50,18 @@ class ProfileView extends GetView<ProfileController> {
                     children: [
                       _buildProfileItems(Icons.settings, 'Settings'),
                       _buildProfileItems(
-                          Icons.group_add_outlined, 'Invite friend'),
+                        Icons.group_add_outlined,
+                        'Invite friend',
+                      ),
                       Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 10),
                         child: GestureDetector(
                           onTap: () {
-                            // controller.logOut()
+                            controller.signOut();
                           },
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.logout,
-                                color: Colors.red.shade500,
-                              ),
+                              Icon(Icons.logout, color: Colors.red.shade500),
                               smallHorizontalSpacing,
                               Text(
                                 "Log out",
@@ -72,14 +70,14 @@ class ProfileView extends GetView<ProfileController> {
                                   fontSize: normalSize,
                                   fontWeight: FontWeight.w500,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -95,10 +93,7 @@ class ProfileView extends GetView<ProfileController> {
         children: [
           Icon(icon),
           smallHorizontalSpacing,
-          Text(
-            desc,
-            style: AppTextStyles.subHeaderStyle,
-          )
+          Text(desc, style: AppTextStyles.subHeaderStyle),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:visit_tracker/app/data/providers/api_providers.dart';
 import 'package:visit_tracker/app/modules/analytics/models/sf_data.dart';
 import 'package:visit_tracker/app/utils/resources/data_state.dart';
@@ -11,13 +12,12 @@ class AnalyticsController extends GetxController {
   final reportPeriod = 'All'.obs;
   Rx<DataState<ActivityResponse>> activities = Rx(Initial());
   ApiProviders apiProviders = ApiProviders();
-  Rxn<List<ChartData>> chartData = Rxn(null);
+  String? userId = Supabase.instance.client.auth.currentUser?.id;
   final statusCount = {'Completed': 0, 'Pending': 0, 'Cancelled': 0}.obs;
 
-  final periodCount = {'Completed': 0, 'Pending': 0, 'Cancelled': 0}.obs;
-
   Future<void> getAllActivities() async {
-    var allActivities = await apiProviders.getAllActivities();
+    activities.value = Initial();
+    var allActivities = await apiProviders.getAllActivities(userId ?? "");
 
     activities.value = allActivities;
 
@@ -28,10 +28,12 @@ class AnalyticsController extends GetxController {
               statusCount[activity.status]! + 1;
         }
       }
+
+      buildChartData(activities.value.data);
     }
   }
 
-  List<SfData> buildChartData(List<ActivityResponse>? activities) {
+  buildChartData(List<ActivityResponse>? activities) {
     final now = DateTime.now();
     final sevenDaysAgo = now.subtract(Duration(days: 6));
 
@@ -39,8 +41,8 @@ class AnalyticsController extends GetxController {
 
     if (activities != null) {
       for (var activity in activities) {
-        final dateStr = activity.createdAt.split('T').first;
-        final date = DateTime.tryParse(dateStr);
+        final dateString = activity.createdAt.split('T').first;
+        final date = DateTime.tryParse(dateString);
 
         if (date == null || date.isBefore(sevenDaysAgo)) continue;
 

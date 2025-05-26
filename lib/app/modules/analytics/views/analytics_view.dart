@@ -22,7 +22,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
         padding: EdgeInsets.all(10),
         child: Obx(() {
           var activities = controller.activities.value;
-          final chartData = controller.buildChartData(activities.data);
+          // final chartData = controller.buildChartData(activities.data);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -48,7 +48,9 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 'Daily counts',
                                 style: AppTextStyles.largeSubHeaderStyle,
                               ),
-                              _buildDailyReportSection(chartData),
+                              _buildDailyReportSection(
+                                controller.buildChartData(activities.data),
+                              ),
 
                               Text(
                                 'Total counts',

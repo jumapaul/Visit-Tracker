@@ -8,10 +8,10 @@ import '../../profile/views/profile_view.dart';
 class MainController extends GetxController {
   var selectedTab = 0.obs;
 
-  final List<Widget> screens = const [
-    HomeView(),
+  final List<Widget> screens = [
+    const HomeView(),
     AnalyticsView(),
-    ProfileView(),
+    const ProfileView(),
   ];
   var navItem = [
     BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:visit_tracker/app/data/model/add_activity.dart';
 import 'package:visit_tracker/app/data/model/customer_dto.dart';
 import 'package:visit_tracker/app/data/providers/api_providers.dart';
@@ -16,10 +17,17 @@ class HomeController extends GetxController {
   var addCustomerState = false.obs;
   var addActivityState = false.obs;
   Rx<DataState<CustomerResponse>> customers = Rx(Initial());
+  String? userId = Supabase.instance.client.auth.currentUser?.id;
+
+  var client = Supabase.instance;
 
   Future<void> addCustomer() async {
+    var userId = client.client.auth.currentUser?.id;
     addCustomerState.value = true;
-    var body = CustomerDto(customerName: customerNameController.text);
+    var body = CustomerDto(
+      customerName: customerNameController.text,
+      userId: userId ?? "",
+    );
     await apiProviders.addCustomer(body);
     getAllCustomers();
     addCustomerState.value = false;
@@ -40,6 +48,7 @@ class HomeController extends GetxController {
       status: "Pending",
       customerId: customerId,
       createdAt: DateTime.now().toString(),
+      userId: userId ?? "",
     );
     await apiProviders.addActivity(body);
     addActivityState.value = false;
@@ -49,7 +58,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> searchCustomer(String? searchString) async {
-    customers.value = await apiProviders.searchCustomer(searchString);
+    customers.value = await apiProviders.searchCustomer(searchString, userId);
   }
 
   @override
